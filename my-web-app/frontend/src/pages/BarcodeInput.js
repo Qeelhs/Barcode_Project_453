@@ -3,19 +3,24 @@ import React, { useState } from 'react';
 const BarcodeInput = () => {
   const [barcode, setBarcode] = useState('');
   const [data, setData] = useState(null);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    setData(null);
+    
     try {
       const response = await fetch(`/api/barcode/${barcode}`);
       if (response.ok) {
         const result = await response.json();
         setData(result);
       } else {
-        console.error('Error fetching barcode data:', response.statusText);
+        const errorData = await response.json();
+        setError(errorData.message);
       }
     } catch (error) {
-      console.error('Error fetching barcode data:', error);
+      setError('Error fetching barcode data');
     }
   };
 
@@ -31,7 +36,13 @@ const BarcodeInput = () => {
         />
         <button type="submit">Submit</button>
       </form>
-      {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {data && (
+        <div>
+          <h3>Nutritional Facts</h3>
+          <pre>{JSON.stringify(data, null, 2)}</pre>
+        </div>
+      )}
     </div>
   );
 };

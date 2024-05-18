@@ -1,5 +1,6 @@
 const fetch = require('node-fetch');
 
+// Your controller logic here
 exports.checkAllergens = async (req, res) => {
     const { nutritionalFacts } = req.body;
     try {
