@@ -1,21 +1,33 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Home from './pages/Home';
-import BarcodeInput from './pages/BarcodeInput';
-import Header from './components/Header';
-import Footer from './components/Footer';
+import React, { useState } from 'react';
+import BarcodeInput from './components/BarcodeInput';
+import ProductDetails from './components/ProductDetails';
+import './App.css';
 
-function App() {
+const App = () => {
+  const [product, setProduct] = useState(null);
+
+  const fetchProductDetails = async (barcode) => {
+    try {
+      const response = await fetch(`/api/barcode/${barcode}`);
+      if (response.ok) {
+        const data = await response.json();
+        setProduct(data);
+      } else {
+        setProduct(null);
+      }
+    } catch (error) {
+      console.error('Error fetching product details:', error);
+      setProduct(null);
+    }
+  };
+
   return (
-    <Router>
-      <Header />
-      <Switch>
-        <Route path="/" exact component={Home} />
-        <Route path="/barcode-input" component={BarcodeInput} />
-      </Switch>
-      <Footer />
-    </Router>
+    <div className="App">
+      <h1>Barcode Nutrition Finder</h1>
+      <BarcodeInput onBarcodeSubmit={fetchProductDetails} />
+      <ProductDetails product={product} />
+    </div>
   );
-}
+};
 
 export default App;
