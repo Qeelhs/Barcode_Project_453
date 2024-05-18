@@ -14,6 +14,10 @@ const port = process.env.PORT || 7000;
 
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.send('Welcome to the Nutritional Facts Finder API');
+});
+
 app.use('/api/barcode', barcodeRoutes);
 app.use('/api/allergen', allergenRoutes);
 
