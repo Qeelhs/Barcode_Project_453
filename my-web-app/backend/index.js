@@ -1,11 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const barcodeRoutes = require('./routes/barcodeRoutes');
-const allergenRoutes = require('./routes/allergenRoutes');
-const { graphqlHTTP } = require('express-graphql');
-const schema = require('./graphql/schema');
-const resolvers = require('./graphql/resolvers');
 const dotenv = require('dotenv');
+const barcodeRoutes = require('./routes/barcodeRoutes');
 
 dotenv.config();
 
@@ -19,17 +15,13 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/barcode', barcodeRoutes);
-app.use('/api/allergen', allergenRoutes);
-
-app.use('/graphql', graphqlHTTP({
-  schema,
-  rootValue: resolvers,
-  graphiql: true,
-}));
 
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB connection error:', err));
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch(err => {
+    console.error('MongoDB connection error:', err.message);
+    process.exit(1);
+  });
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

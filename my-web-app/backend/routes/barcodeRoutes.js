@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const barcodeController = require('../controllers/barcodeController');
+const { getProductByBarcode } = require('../controllers/barcodeController');
 
-router.get('/:barcode', barcodeController.getBarcodeData);
+router.get('/:barcode', getProductByBarcode);
 
 module.exports = router;

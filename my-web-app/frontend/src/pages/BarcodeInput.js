@@ -9,9 +9,11 @@ const BarcodeInput = () => {
     e.preventDefault();
     setError('');
     setData(null);
-    
+
+    const trimmedBarcode = barcode.trim();
+
     try {
-      const response = await fetch(`/api/barcode/${barcode}`);
+      const response = await fetch(`/api/barcode/${trimmedBarcode}`);
       if (response.ok) {
         const result = await response.json();
         setData(result);
